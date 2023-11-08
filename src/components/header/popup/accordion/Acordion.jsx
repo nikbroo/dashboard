@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+// import React, { useState } from "react";
 import {
   Accordion,
   AccordionItem,
@@ -8,11 +8,11 @@ import {
   Box,
 } from "@chakra-ui/react";
 import { Checkbox } from '@chakra-ui/react'
-import defaultData from "../../../../data/generated.json"
+// import defaultData from "../../../../data/generated.json"
 
 const Acordion = ({name}) => {
 
-  const [filterData, setFilterData] = useState(defaultData)
+  // const [filterData, setFilterData] = useState(defaultData)
 
   return (
     <Accordion defaultIndex={[0]} allowMultiple>
