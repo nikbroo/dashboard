@@ -33,7 +33,7 @@ const Table = () => {
                         <td>{data.Department}</td>
                         <td>{data.students}</td>
                         <td>{data.Status?"ok":"no ok"}</td>
-                        <td><a href="#">{"View More >"}</a></td>
+                        <td><a href="a">{"View More >"}</a></td>
                     </tr>
                 ))
             }
