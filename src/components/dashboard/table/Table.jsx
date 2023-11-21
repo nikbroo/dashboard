@@ -1,12 +1,28 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./style.css";
-import data from "../../../data/generated.json";
 import { pagination } from "../../../data/data";
 import { Button } from "@chakra-ui/react";
+import { useDispatch, useSelector } from "react-redux";
+import { filterDispatch, searchDispatch } from "../../../reducers/dataSlice"; 
 
 const Table = () => {
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
+  const [tableData, setTableData] = useState([]);
+
+  const itemState = useSelector((state) => state.items.itemState)
+  const itemDep = useSelector((state) => state.items.itemDep)
+  const testSearchData = useSelector((state) => state.data.searchState)
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    let {pageData,newData} = pagination(page, limit, itemState, itemDep);
+    setTableData(pageData)
+    dispatch(filterDispatch(newData))
+  }, [itemState, itemDep, page])
+
+  let filterDataFinal = useSelector((state) => state.data.dataState)
 
   return (
     <div className="table">
@@ -23,7 +39,7 @@ const Table = () => {
           </tr>
         </thead>
         <tbody>
-          {pagination(page, limit).map((data, index) => (
+          {(testSearchData.length===0? tableData : testSearchData).map((data, index) => (
             <tr key={data._id}>
               <td>{index + limit * (page - 1) + 1}</td>
               <td>{data.teacherName}</td>
@@ -38,7 +54,7 @@ const Table = () => {
           ))}
         </tbody>
       </table>
-      {Array.from({ length: Math.ceil(data.length / limit) }).map((v, i) => (
+      {Array.from({ length: Math.ceil((testSearchData.length===0? filterDataFinal : testSearchData).length / limit) }).map((v, i) => (
         <Button
           key={i}
           onClick={() => setPage(i + 1)}

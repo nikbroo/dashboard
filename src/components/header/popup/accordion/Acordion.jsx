@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import {
-  Accordion,
   AccordionItem,
   AccordionButton,
   AccordionPanel,
@@ -11,10 +10,10 @@ import {
 import { Checkbox } from "@chakra-ui/react";
 import defaultData from "../../../../data/generated.json";
 
-const Acordion = ({ name }) => {
+const Acordion = ({ name, item, setItems }) => {
   const [filterData, setFilterData] = useState([]);
   const [checkedItems, setCheckedItems] = useState([]);
-  const [item,setItems] = useState([])
+  
 
   useEffect(() => {
     let filter_arr = [];
@@ -25,25 +24,26 @@ const Acordion = ({ name }) => {
     }
     setFilterData(filter_arr);
     setCheckedItems(Array(filter_arr.length).fill(true));
+    setItems(filter_arr)
   }, [name]);
 
-  const handleCheckboxChange = (index,data) => {
+  const handleCheckboxChange = (index, data) => {
     const newCheckedItems = [...checkedItems];
     newCheckedItems[index] = !newCheckedItems[index];
-    if(newCheckedItems[index]){
-      setItems([...item,data])
-    }else{
-     let newItem =  item.filter(i=>i!==data)
-     setItems(newItem)
+    if (newCheckedItems[index]) {
+      setItems([...item, data]);
+    } else {
+      let newItem = item.filter((i) => i !== data);
+      setItems(newItem);
     }
     setCheckedItems(newCheckedItems);
   };
-  useEffect(()=>{console.log(item,"selected")},[item])
+  
   const allChecked = checkedItems.every(Boolean);
   const isIndeterminate = checkedItems.some(Boolean) && !allChecked;
 
   return (
-    <Accordion defaultIndex={[0]} allowMultiple>
+    <>
       <AccordionItem>
         <h2>
           <AccordionButton>
@@ -57,8 +57,9 @@ const Acordion = ({ name }) => {
           <Checkbox
             isChecked={allChecked}
             isIndeterminate={isIndeterminate}
-            onChange={(e) => {setCheckedItems(Array(filterData.length).fill(!allChecked))
-              setItems(e.target.checked?filterData:[])
+            onChange={(e) => {
+              setCheckedItems(Array(filterData.length).fill(!allChecked));
+              setItems(e.target.checked ? filterData : []);
             }}
           >
             All
@@ -68,7 +69,7 @@ const Acordion = ({ name }) => {
               <Checkbox
                 key={index}
                 isChecked={checkedItems[index]}
-                onChange={() => handleCheckboxChange(index,data)}
+                onChange={() => handleCheckboxChange(index, data)}
               >
                 {typeof data === "boolean" ? (data ? "Ok" : "Not Ok") : data}
               </Checkbox>
@@ -76,7 +77,7 @@ const Acordion = ({ name }) => {
           </Stack>
         </AccordionPanel>
       </AccordionItem>
-    </Accordion>
+    </>
   );
 };
 
